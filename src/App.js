@@ -15,10 +15,10 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          POOSY
+          POOPOO
         </a>
       </header>
-    </div>s
+    </div>
   );
 }
 
