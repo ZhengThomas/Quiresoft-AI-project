@@ -85,22 +85,31 @@ export class App extends React.Component{
     let images = []
     for(let i = 0; i < this.state.images.length; i++){
       console.log(this.state.images[i])
-      images.push(<img src = {this.state.images[i]}></img>);
+      images.push(<img src = {this.state.images[i]} className = "contentImage"></img>);
     }
-
+    
+    let firstCol = []
+    let secondCol = []
+    for(let i = 0; i < Math.floor(images.length / 2); i++){
+      firstCol.push(images[i]);
+    }
+    for(let i = Math.floor(images.length/2); i < images.length; i++){
+      secondCol.push(images[i]);
+    }
+    
     //this is the images above the text box. This could be empty, if there are no images at all
+    //TODO - Figure out how to use react col, so i cant set the sm = {6} to work
+    //in other words, make it responsive to the size of the webpage
     let Content = (<div className = "contentBox">
-      <Container>
-        <Col className = "column1">
-          <Row>
-            penis2
-          </Row>
-        </Col>
-        <Col className = "column2">
-          <Row>
-            penis1
-          </Row>
-        </Col>
+      <Container style = {{padding: 0, margin:0}}>
+        <Row style = {{width : "101.3%", height : "100%", margin: 0}}>
+          <Col className = "contentCol" >
+            {firstCol}
+          </Col>
+          <Col className = "contentCol" >
+            {secondCol}
+          </Col>
+        </Row>
       </Container>
     </div>);
 
@@ -110,7 +119,7 @@ export class App extends React.Component{
     <div className = "inputBox">
     <Form className = "inner">
       <Form.Group className = "textBox">
-        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt}/>
+        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} />
       </Form.Group>
       <Button id = "button" onClick = {this.generateData}>
         Submit
