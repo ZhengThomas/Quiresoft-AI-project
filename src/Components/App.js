@@ -1,0 +1,166 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import React from 'react';
+import axios from "axios";
+import Image from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import {Buffer} from 'buffer';
+
+//im fairly certain that I'm supposed to do this to be safe, but im unsure why
+//if you are someone from the future please help
+import secrets from "../secrets.json";
+
+
+export class App extends React.Component{
+  constructor(props){
+    super(props);
+
+    //images holds a list of all generated images, after they ahve been generated
+    //based on what currentState is, the page shows different things (loading, no images, some images)
+    this.state = {
+      img : null,
+      images: [],
+      currentState: "new",
+      prompt:""
+    };
+
+    this.generateData = this.generateData.bind(this);
+    this.onChangePrompt = this.onChangePrompt.bind(this);
+  }
+
+  async generateData(event){
+    event.preventDefault();
+    if(this.state.prompt == ""){
+      return;
+    }
+    else{
+      console.log(this.state);
+      console.log(event);
+    }
+    return;
+
+
+
+    //since calling for data takes a while, the state is set to be loading the images
+    this.setState({currentState: "loading"})
+
+    //this is the main generation of the images
+    //makes a request to the back end, which actually hanldes everything
+    //after, the backend sends here the images that were generted based on the prompt.
+    await axios.post(secrets["main-app-link"], {"prompt": prompt})
+    .then(res => {
+
+      let finalState = res.data["images"];
+
+      this.setState({images:finalState})
+    })
+    .catch(err => {
+      //placeholder for now
+      //TODO - when theres an error, change the webpage to show some 404 error or something
+      console.log(err);
+    });
+
+  }
+
+  componentDidMount(){
+    
+    axios.get("http://localhost:5000/power/power")
+    .then(res => {
+      console.log(res);
+      this.setState({images:res.data.images});
+    })
+  }
+
+  onChangePrompt(e){
+    this.setState({prompt:e.target.value});
+  }
+
+  //TODO - everything looks like shit
+  //follow the mockup online or make up your own stuff.
+  render(){
+    //based on the number of images that the backend sends to the front end, we store more images
+    //im pretty sure dalle on sends 4
+    let images = []
+    for(let i = 0; i < this.state.images.length; i++){
+      console.log(this.state.images[i])
+      images.push(<img src = {this.state.images[i]}></img>);
+    }
+
+    //this is the textBox on the bottom, along with the button
+    //TODO - change the fucking button. How do I put it into the textbox???? and make it a triangle?????
+    let BottomTextBox = (
+    <div className = "inputBox">
+    <Form className = "inner">
+      <Form.Group className = "textBox">
+        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt}/>
+      </Form.Group>
+      <Button id = "button" onClick = {this.generateData}>
+        Submit
+      </Button>
+    </Form>
+    </div>
+    );
+    
+    //this is the images above the text box. This could be empty, if there are no images at all
+    let Content = (<div>
+
+
+
+    </div>);
+
+    //the rightside holds both the searchbar as well as the actual content of the chat
+    //combination of above BottomTextBox and Content
+    let RightSide = (<div className = "rightSideBox">
+      {BottomTextBox}
+
+    </div>);
+
+    
+    //each little piece of history displayed on the left side
+    //will be put into below LeftSide
+    //currently in a testing phase, later will need to do an api call for the history components
+    let testingHistoryComponents = ["Gaming Images", "powerful images", "all of this is testing stuff", "asdasd"]
+    let HistoryComponents = []
+    //this is the white line that borders between each component
+    let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
+    for(let i= 0; i < 3; i++){
+      
+      HistoryComponents.push(<div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
+          <div className = "verticalAlign">
+            <div className = "historyComponent">
+              <h3>{testingHistoryComponents[i]}</h3>
+            </div>
+          </div>
+          {whiteLine}
+        </div>
+      );
+    }
+    //the leftside holds the past chats as well as the profile information on the bottom left
+    let LeftSide = (
+      <div className = "leftSideBox">
+        <div className = "topLeftHistoryBox">
+          <h1>History</h1>
+        </div>
+        <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
+        <div className = "chatHistory">
+          {HistoryComponents}
+
+        </div>
+
+        <div className = "profileInfo">
+
+        </div>
+      </div>
+    )
+    
+    return(
+      <div className = "fullApp">
+        {LeftSide}
+        {RightSide}
+      </div>
+    );
+  }
+}
+
+export default App;
