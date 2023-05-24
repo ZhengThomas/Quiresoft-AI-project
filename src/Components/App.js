@@ -6,6 +6,7 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Buffer} from 'buffer';
+import { Container, Row, Col } from 'react-bootstrap';
 
 //im fairly certain that I'm supposed to do this to be safe, but im unsure why
 //if you are someone from the future please help
@@ -87,6 +88,22 @@ export class App extends React.Component{
       images.push(<img src = {this.state.images[i]}></img>);
     }
 
+    //this is the images above the text box. This could be empty, if there are no images at all
+    let Content = (<div className = "contentBox">
+      <Container>
+        <Col className = "column1">
+          <Row>
+            penis2
+          </Row>
+        </Col>
+        <Col className = "column2">
+          <Row>
+            penis1
+          </Row>
+        </Col>
+      </Container>
+    </div>);
+
     //this is the textBox on the bottom, along with the button
     //TODO - change the fucking button. How do I put it into the textbox???? and make it a triangle?????
     let BottomTextBox = (
@@ -101,17 +118,11 @@ export class App extends React.Component{
     </Form>
     </div>
     );
-    
-    //this is the images above the text box. This could be empty, if there are no images at all
-    let Content = (<div>
-
-
-
-    </div>);
 
     //the rightside holds both the searchbar as well as the actual content of the chat
     //combination of above BottomTextBox and Content
     let RightSide = (<div className = "rightSideBox">
+      {Content}
       {BottomTextBox}
 
     </div>);
@@ -120,11 +131,11 @@ export class App extends React.Component{
     //each little piece of history displayed on the left side
     //will be put into below LeftSide
     //currently in a testing phase, later will need to do an api call for the history components
-    let testingHistoryComponents = ["Gaming Images", "powerful images", "all of this is testing stuff", "asdasd"]
+    let testingHistoryComponents = ["Gaming Images", "powerful images", "all of this is testing stuff", "and currently not working"]
     let HistoryComponents = []
     //this is the white line that borders between each component
     let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
-    for(let i= 0; i < 3; i++){
+    for(let i= 0; i < 4; i++){
       
       HistoryComponents.push(<div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
           <div className = "verticalAlign">

@@ -24,9 +24,10 @@ app.use((req, res, next) => {
 
 app.get("/power/power", (req, res) => {
     const imagePaths = [
-        "/power/test.png",
+        "/power/test1.png",
         "/power/test2.png",
-        "/power/test3.png"
+        "/power/test3.png",
+        "/power/test4.png"
       ];
     
       const images = imagePaths.map(imagePath => `${req.protocol}://${req.get("host")}${imagePath}`);
