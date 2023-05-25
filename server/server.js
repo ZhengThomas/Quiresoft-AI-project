@@ -23,7 +23,6 @@ const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
 //TODO - Add a .env file to hide the test key, currently its meant for testing
-let orgId = "org-KVwLAMwkpB4xA0jbLi3HKTG7"
 
 app.use("/power", express.static(root));
 
@@ -38,6 +37,12 @@ app.use((req, res, next) => {
 
 
 app.get("/power/power", (req, res) => {
+
+    //get the prompt from req.data or something
+    //clean the prompt up, add whatever we want to the prompt
+    //give prompt to chatgpt
+    //get prompt back, send it off to dalle
+    //get image paths back, send it to front end
     const imagePaths = [
         "/power/test1.png",
         "/power/test2.png",

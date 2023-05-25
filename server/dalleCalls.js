@@ -1,8 +1,6 @@
-
-
 //this fucntions just sends whatever you want into the dalle place
-//give it the openai module
-const dalleCall = async function(openai){
+//give it the openai module, as well as the prompt you want it to work
+const dalleCall = async function(openai, prompt){
     const response = await openai.createImage({
         prompt: "a white siamese cat",
         n: 1,
