@@ -53,9 +53,13 @@ app.get("/power/power", (req, res) => {
       const images = imagePaths.map(imagePath => `${req.protocol}://${req.get("host")}${imagePath}`);
     
       res.json({ images });
-})
+});
 
-dalleCalls.dalleCall(openai);
+app.post("/power/power", (req, res) => {
+    res.json(req.body);
+});
+
+//dalleCalls.dalleCall(openai);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));

@@ -32,16 +32,9 @@ export class App extends React.Component{
 
   async generateData(event){
     event.preventDefault();
-    if(this.state.prompt == ""){
+    if(this.state.prompt == "" || this.state.currentState == "loading"){
       return;
     }
-    else{
-      console.log(this.state);
-      console.log(event);
-    }
-    return;
-
-
 
     //since calling for data takes a while, the state is set to be loading the images
     this.setState({currentState: "loading"})
@@ -49,12 +42,12 @@ export class App extends React.Component{
     //this is the main generation of the images
     //makes a request to the back end, which actually hanldes everything
     //after, the backend sends here the images that were generted based on the prompt.
-    await axios.post(secrets["main-app-link"], {"prompt": prompt})
+    await axios.post(secrets["main-app-link"], {"prompt": this.state.prompt})
     .then(res => {
+      return;
 
       let finalState = res.data["images"];
-
-      this.setState({images:finalState})
+      this.setState({images:finalState, currentState:"finished"});
     })
     .catch(err => {
       //placeholder for now
@@ -82,9 +75,11 @@ export class App extends React.Component{
   render(){
     //based on the number of images that the backend sends to the front end, we store more images
     //im pretty sure dalle on sends 4
+
+    
     let images = []
     for(let i = 0; i < this.state.images.length; i++){
-      console.log(this.state.images[i])
+      //console.log(this.state.images[i])
       images.push(<img src = {this.state.images[i]} className = "contentImage"></img>);
     }
     
