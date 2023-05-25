@@ -11,6 +11,8 @@ const openAIConfig = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+
+
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
 
