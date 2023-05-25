@@ -10,12 +10,14 @@ const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
 const dalleCalls = require("./dalleCalls");
+//dont use the fake openai, it jsut set up configuraation for the openai api
 const fakeOpenai = require('openai')
 
 const openAIConfig = new fakeOpenai.Configuration({
     organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
     apiKey: process.env.OPENAI_API_KEY,
 });
+//this is the one that has actual access to the open ai api
 const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 
 //change this later, currently meant for testing
@@ -48,7 +50,7 @@ app.get("/power/power", (req, res) => {
       res.json({ images });
 })
 
-dalleCalls.dalleCall("poopoopeepee");
+dalleCalls.dalleCall(openai);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
