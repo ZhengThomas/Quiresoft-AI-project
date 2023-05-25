@@ -1,16 +1,24 @@
+import { Configuration, OpenAIApi } from "openai";
 const express = require('express');
 const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
-
 const fs = require('fs');
+
+const openAIConfig = new Configuration({
+    organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
 
-app.use("/power", express.static(root));
+//TODO - Add a .env file to hide the test key, currently its meant for testing
+let apiKey = "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"
+let orgId = "org-KVwLAMwkpB4xA0jbLi3HKTG7"
 
+app.use("/power", express.static(root));
 
 app.use((req, res, next) => {
     //how safe is this i dont actually know

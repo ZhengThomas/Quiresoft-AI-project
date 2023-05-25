@@ -140,11 +140,11 @@ export class App extends React.Component{
     //each little piece of history displayed on the left side
     //will be put into below LeftSide
     //currently in a testing phase, later will need to do an api call for the history components
-    let testingHistoryComponents = ["Gaming Images", "powerful images", "all of this is testing stuff", "and currently not working"]
+    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing"]
     let HistoryComponents = []
     //this is the white line that borders between each component
     let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
-    for(let i= 0; i < 4; i++){
+    for(let i= 0; i < 3; i++){
       
       HistoryComponents.push(<div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
           <div className = "verticalAlign">
