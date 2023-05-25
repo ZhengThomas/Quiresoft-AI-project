@@ -1,4 +1,8 @@
-import { Configuration, OpenAIApi } from "openai";
+
+require('dotenv').config()
+//import { Configuration, OpenAIApi } from "openai";
+
+
 const express = require('express');
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -6,17 +10,17 @@ const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
 const dalleCalls = require("./dalleCalls");
+const openai = require('openai')
 
-const openAIConfig = new Configuration({
+const openAIConfig = new openai.Configuration({
     organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
     apiKey: process.env.OPENAI_API_KEY,
 });
 
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
-
+console.log(process.env.OPENAI_API_KEY)
 //TODO - Add a .env file to hide the test key, currently its meant for testing
-let apiKey = "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"
 let orgId = "org-KVwLAMwkpB4xA0jbLi3HKTG7"
 
 app.use("/power", express.static(root));
@@ -45,6 +49,8 @@ app.get("/power/power", (req, res) => {
 })
 
 dalleCalls.dalleCall("poopoopeepee");
+
+
 
 
 const PORT = process.env.PORT || 5000;
