@@ -5,13 +5,12 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
+const dalleCalls = require("./dalleCalls");
 
 const openAIConfig = new Configuration({
     organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
     apiKey: process.env.OPENAI_API_KEY,
 });
-
-
 
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
@@ -44,6 +43,8 @@ app.get("/power/power", (req, res) => {
     
       res.json({ images });
 })
+
+dalleCalls.dalleCall("poopoopeepee");
 
 
 const PORT = process.env.PORT || 5000;
