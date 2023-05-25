@@ -9,18 +9,19 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
-const openai = require('openai')
+const dalleCalls = require("./dalleCalls");
+//dont use the fake openai, it jsut set up configuraation for the openai api
+const fakeOpenai = require('openai')
 
-const openAIConfig = new openai.Configuration({
+const openAIConfig = new fakeOpenai.Configuration({
     organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
     apiKey: process.env.OPENAI_API_KEY,
 });
-
-
+//this is the one that has actual access to the open ai api
+const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 
 //change this later, currently meant for testing
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
-console.log(process.env.OPENAI_API_KEY)
 //TODO - Add a .env file to hide the test key, currently its meant for testing
 let orgId = "org-KVwLAMwkpB4xA0jbLi3HKTG7"
 
@@ -49,8 +50,7 @@ app.get("/power/power", (req, res) => {
       res.json({ images });
 })
 
-
-
+dalleCalls.dalleCall(openai);
 
 
 const PORT = process.env.PORT || 5000;
