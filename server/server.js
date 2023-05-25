@@ -15,7 +15,7 @@ const openAIConfig = new Configuration({
 root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
 
 //TODO - Add a .env file to hide the test key, currently its meant for testing
-let apiKey = "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"
+let apiKey = "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"
 let orgId = "org-KVwLAMwkpB4xA0jbLi3HKTG7"
 
 app.use("/power", express.static(root));
