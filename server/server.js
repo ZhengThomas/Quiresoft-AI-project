@@ -10,6 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
 const dalleCalls = require("./dalleCalls");
+const GPTCalls = require("./GPTCalls");
 //dont use the fake openai, it jsut set up configuraation for the openai api
 const fakeOpenai = require('openai')
 
@@ -50,8 +51,8 @@ app.get("/power/power", (req, res) => {
       res.json({ images });
 })
 
-dalleCalls.dalleCall(openai);
-
-
+//dalleCalls.dalleCall(openai);
+GPTCalls.GPTCall(openai);
+console.log("NOO")
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
