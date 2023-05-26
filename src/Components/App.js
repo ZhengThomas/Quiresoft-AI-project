@@ -114,9 +114,9 @@ export class App extends React.Component{
     <div className = "inputBox">
     <Form className = "inner">
       <Form.Group className = "textBox">
-        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} />
+        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange"/>
       </Form.Group>
-      <Button id = "button" onClick = {this.generateData}>
+      <Button id = "button" onClick = {this.generateData} className = "preventColorChange">
         Submit
       </Button>
     </Form>
