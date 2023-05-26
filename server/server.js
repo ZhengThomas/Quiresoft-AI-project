@@ -3,21 +3,57 @@ require('dotenv').config()
 //import { Configuration, OpenAIApi } from "openai";
 
 
+const mongoose = require('mongoose');
 const express = require('express');
 const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 const fs = require('fs');
+
+
 const dalleCalls = require("./dalleCalls");
 const GPTCalls = require("./GPTCalls");
+
+
 //dont use the fake openai, it jsut set up configuraation for the openai api
 const fakeOpenai = require('openai')
+
+
+//MongoDB Connection
+const mongoURL = process.env.DATABASE_URL;
+mongoose.connect(mongoURL);
+
+const database = mongoose.connection
+database.on('error', (error) => {
+  console.log(error)
+})
+
+database.once('connected', () => {
+  console.log('Database Connected');
+})
+
+
+//Using the MongoDB Connection
+const routes = require('./routes/routes');
+app.use('/api', routes)
 
 const openAIConfig = new fakeOpenai.Configuration({
     organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
     apiKey: process.env.OPENAI_API_KEY,
 });
+
+app.use((req, res, next) => {
+  //how safe is this i dont actually know
+  //this used to be a proxy server so i can get around cors but i dont know shit
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+  res.header("Access-Control-Allow-Headers", "url, Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Origin, x-riot-token");
+  next();
+});
+
+
+
 //this is the one that has actual access to the open ai api
 const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 
@@ -27,14 +63,7 @@ root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
 
 app.use("/power", express.static(root));
 
-app.use((req, res, next) => {
-    //how safe is this i dont actually know
-    //this used to be a proxy server so i can get around cors but i dont know shit
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-    res.header("Access-Control-Allow-Headers", "url, Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Origin, x-riot-token");
-    next();
-  });
+
 
 
 app.get("/power/power", (req, res) => {
@@ -61,7 +90,7 @@ app.post("/power/power", (req, res) => {
 });
 
 //dalleCalls.dalleCall(openai);
-GPTCalls.GPTCall(openai);
+//GPTCalls.GPTCall(openai);
 console.log("NOO")
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
