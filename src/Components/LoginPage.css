@@ -1,0 +1,107 @@
+.loginPageEntire{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.logo {
+    background-color: black;
+    width: 8vw;
+    height: 8vw;
+    margin-bottom:3%;
+}
+
+.bottomSideLoginPage {
+    height:23%;
+    width:100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bottomStuff{
+    background-color: #3C3C3E;
+    width: 100%;
+    height: 8vh;
+}
+
+.actualLogin{
+    height : 77%;
+    width:100%;
+
+    display: flex;
+    align-items:center;  
+    justify-content: end;
+    flex-direction: column;
+}
+
+.loginBox{
+    background-color: #F9F9F9;
+    width:26vw;
+    height:23vw;
+
+    border: solid #A7AEB9 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginBox > .titleSection{
+    height:22%;
+    margin-bottom: 3%;
+    width:80%;
+    border-bottom: solid black 1px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.loginBox > .titleSection > h1{
+    color:black;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.loginBox > .inputSection{
+    height:75%;
+    width:100%;
+
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formGroupLogin{
+    width:80%;
+    height:100%;
+}
+
+.formGroupLogin > .textBox{
+    margin-bottom: 1.5vh;
+}
+
+.formGroupLogin > .seperatedLabel{
+    margin-bottom: 3px;
+    margin-top: 2vh;
+}
+.formGroupLogin > .label{
+    margin-bottom: 2px;
+}
+
+.formGroupLogin > #button{
+    width:100%;
+    border-radius: 1000px;
+}
+
+.signUp{
+    width:100%;
+    display: flex;
+    flex-direction: row-reverse;
+    color:#0049D8;
+    font-weight: 100;
+}
+
+.failedBox{
+    color:red
+}
