@@ -114,3 +114,8 @@ h1{
   height: auto;
   padding: 2px;
 }
+
+.preventColorChange:focus{
+  outline: none !important;
+  box-shadow: none;
+}
