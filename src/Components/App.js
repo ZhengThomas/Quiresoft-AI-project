@@ -71,6 +71,9 @@ export class App extends React.Component{
       console.log(res);
       this.setState({images:res.data.images});
     })
+    .catch(
+      console.log("asd")
+    )
   }
 
   onChangePrompt(e){
