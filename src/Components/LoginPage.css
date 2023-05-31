@@ -103,5 +103,6 @@
 }
 
 .failedBox{
-    color:red
+    color:red;
+    height:3vh
 }
