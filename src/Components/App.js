@@ -53,9 +53,7 @@ export class App extends React.Component{
       this.setState({images:finalState, currentState:"finished"});
     })
     .catch(err => {
-      //placeholder for now
-      //TODO - when theres an error, change the webpage to show some 404 error or something
-      this.setState({currentState:"error"});
+      this.setState({currentState:"failed"});
       console.log(err);
     });
 
@@ -127,7 +125,7 @@ export class App extends React.Component{
     if(this.state.currentState == "failed"){
       Content = 
       (<div className = "loadingBox">
-        <h1>Loading of images failed. Please try again</h1>
+        <h1 className = "errorText">Loading of images failed. Please try again</h1>
       </div>
       )
     }
