@@ -3,15 +3,12 @@
 const dalleCall = async function(openai, prompt){
     const response = await openai.createImage({
         "prompt": prompt,
-        n: 1,
-        size: "100x100",
+        n: 4,
+        size: "1024x1024",
       });
     image_url = response.data.data;
-    console.log(image_url);
+    //console.log(image_url);
     return image_url;
 }
 
-const fullDalleCall = async function(openai, prompt){
-
-}
 module.exports = {dalleCall};

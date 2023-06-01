@@ -47,7 +47,7 @@ export class App extends React.Component{
       console.log(res.data);
 
       let finalState = []
-      for(let i = 0; i < 4; i++){
+      for(let i = 0; i < res.data.length; i++){
         finalState.push(res.data[i].url);
       }
       this.setState({images:finalState, currentState:"finished"});
@@ -55,13 +55,15 @@ export class App extends React.Component{
     .catch(err => {
       //placeholder for now
       //TODO - when theres an error, change the webpage to show some 404 error or something
+      this.setState({currentState:"error"});
       console.log(err);
     });
 
   }
 
+  /*
   componentDidMount(){
-    
+    //this is msotly for testing purposes to see if the front end can communicate with the backend
     axios.get("http://localhost:5000/power/power")
     .then(res => {
       this.setState({images:res.data.images});
@@ -70,6 +72,7 @@ export class App extends React.Component{
       //lol i currently have nothing in case it fails
     )
   }
+  */
 
   onChangePrompt(e){
     this.setState({prompt:e.target.value});
@@ -79,7 +82,7 @@ export class App extends React.Component{
   //follow the mockup online or make up your own stuff.
   render(){
     //based on the number of images that the backend sends to the front end, we store more images
-    //im pretty sure dalle on sends 4
+    //im pretty sure dalle sends 4
 
     
     let images = []
@@ -113,13 +116,29 @@ export class App extends React.Component{
       </Container>
     </div>);
 
+    if(this.state.currentState == "loading"){
+      Content = 
+      (<div className = "loadingBox">
+        <img src = {`/images/loading.png`} className = "loadingImage" style = {{transform: "rotate(39deg)", animation: `spin ${0.9}s linear infinite`}}/>
+      </div>
+      )
+    }
+
+    if(this.state.currentState == "failed"){
+      Content = 
+      (<div className = "loadingBox">
+        <h1>Loading of images failed. Please try again</h1>
+      </div>
+      )
+    }
+
     //this is the textBox on the bottom, along with the button
     //TODO - change the fucking button. How do I put it into the textbox???? and make it a triangle?????
     let BottomTextBox = (
     <div className = "inputBox">
     <Form className = "inner">
       <Form.Group className = "textBox">
-        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange"/>
+        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange" onSubmit={this.generateData}/>
       </Form.Group>
       <Button id = "button" onClick = {this.generateData} className = "preventColorChange">
         Submit

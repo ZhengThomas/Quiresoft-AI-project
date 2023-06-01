@@ -7,7 +7,7 @@ const GPTCall = async function(openai, prompt){
       "prompt": prompt,
       "max_tokens":60
     });
-    console.log(response.data.choices[0])
+    //console.log(response.data.choices[0])
   return response.data.choices;
 }
 

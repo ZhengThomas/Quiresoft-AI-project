@@ -119,3 +119,28 @@ h1{
   outline: none !important;
   box-shadow: none;
 }
+
+.loadingImage{
+  width:20%;
+  height:auto;
+}
+
+
+.loadingBox{
+  width:100%;
+  height:88%;
+  margin-top: none;
+  overflow-y:scroll;
+  overflow-x: hidden;
+
+  padding: 0;
+  margin:0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}
