@@ -42,8 +42,9 @@ export class App extends React.Component{
     //this is the main generation of the images
     //makes a request to the back end, which actually hanldes everything
     //after, the backend sends here the images that were generted based on the prompt.
-    await axios.post(secrets["main-app-link"], {"prompt": this.state.prompt})
+    await axios.post(secrets["dalle-gpt-call-link"], {"prompt": this.state.prompt})
     .then(res => {
+      console.log(res.data);
       return;
 
       let finalState = res.data["images"];
@@ -61,11 +62,10 @@ export class App extends React.Component{
     
     axios.get("http://localhost:5000/power/power")
     .then(res => {
-      console.log(res);
       this.setState({images:res.data.images});
     })
     .catch(
-      console.log("asd")
+      //lol i currently have nothing in case it fails
     )
   }
 

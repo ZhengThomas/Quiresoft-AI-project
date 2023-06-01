@@ -39,7 +39,7 @@ const routes = require('./routes/routes');
 app.use('/api', routes)
 
 const openAIConfig = new fakeOpenai.Configuration({
-    organization: "org-KVwLAMwkpB4xA0jbLi3HKTG7",
+    organization: "org-EOQWL5JneFqSFELhPmlVTlow",
     apiKey: process.env.OPENAI_API_KEY,
 });
 
@@ -85,12 +85,30 @@ app.get("/power/power", (req, res) => {
       res.json({ images });
 });
 
-app.post("/power/power", (req, res) => {
-    res.json(req.body);
+app.post("/gptCall", async (req, res) => {
+  const answer = await GPTCalls.GPTCall(openai, req.body.prompt);
+  res.json(answer);
+  return
 });
 
-//dalleCalls.dalleCall(openai);
-//GPTCalls.GPTCall(openai);
-console.log("NOO")
+app.post("/gptIntoDalleCall", async (req, res) => {
+  //TODO - here we should add whatever we need to this prompt to make the prompt better
+  const realPrompt = `I am going to give a sequence of orders. Give me only your response for item 2.
+  1. Come up with an idea for the background image that is about ` + req.body.prompt + ` 
+  2.Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. Start the prompt with the words "Dalle Prompt"
+  `
+  const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
+  //TODO - here we should filter the gpt answer to get the part thats actually useful
+  const dalleAnswer = await dalleCalls.dalleCall(openai, gptAnswer[0].message.content);
+  res.json(dalleAnswer);
+  return;
+});
+
+app.get("/test", async (req, res) => {
+  const answer =await openai.listModels();
+  console.log(answer.data);
+  res.json(answer.data);
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));

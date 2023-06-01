@@ -2,12 +2,16 @@
 //give it the openai module, as well as the prompt you want it to work
 const dalleCall = async function(openai, prompt){
     const response = await openai.createImage({
-        prompt: "a white siamese cat",
+        "prompt": prompt,
         n: 1,
         size: "1024x1024",
       });
-    image_url = response.data.data[0].url;
+    image_url = response.data.data;
     console.log(image_url);
+    return image_url;
 }
 
+const fullDalleCall = async function(openai, prompt){
+
+}
 module.exports = {dalleCall};
