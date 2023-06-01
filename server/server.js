@@ -99,7 +99,8 @@ app.post("/gptIntoDalleCall", async (req, res) => {
   `
   const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
   //TODO - here we should filter the gpt answer to get the part thats actually useful
-  const dalleAnswer = await dalleCalls.dalleCall(openai, gptAnswer[0].message.content);
+  //with the current model being used, chat gpt will almost always say "dalle prompt:" before the actual prompt
+  const dalleAnswer = await dalleCalls.dalleCall(openai, gptAnswer[0].text);
   res.json(dalleAnswer);
   return;
 });

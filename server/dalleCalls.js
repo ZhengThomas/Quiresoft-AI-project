@@ -4,7 +4,7 @@ const dalleCall = async function(openai, prompt){
     const response = await openai.createImage({
         "prompt": prompt,
         n: 1,
-        size: "1024x1024",
+        size: "100x100",
       });
     image_url = response.data.data;
     console.log(image_url);

@@ -45,9 +45,11 @@ export class App extends React.Component{
     await axios.post(secrets["dalle-gpt-call-link"], {"prompt": this.state.prompt})
     .then(res => {
       console.log(res.data);
-      return;
 
-      let finalState = res.data["images"];
+      let finalState = []
+      for(let i = 0; i < 4; i++){
+        finalState.push(res.data[i].url);
+      }
       this.setState({images:finalState, currentState:"finished"});
     })
     .catch(err => {

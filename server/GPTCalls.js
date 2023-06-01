@@ -2,9 +2,10 @@
 //give it the openai module
 const GPTCall = async function(openai, prompt){
   
-  const response = await openai.createChatCompletion({
+  const response = await openai.createCompletion({
       model: "text-davinci-002",
-      messages: [{role: "user", content: prompt}]
+      "prompt": prompt,
+      "max_tokens":60
     });
     console.log(response.data.choices[0])
   return response.data.choices;
