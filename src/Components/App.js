@@ -59,9 +59,10 @@ export class App extends React.Component{
 
   }
 
-  /*
+  
   componentDidMount(){
     //this is msotly for testing purposes to see if the front end can communicate with the backend
+    //unsure if backend even has this endpoint currently
     axios.get("http://localhost:5000/power/power")
     .then(res => {
       this.setState({images:res.data.images});
@@ -70,7 +71,7 @@ export class App extends React.Component{
       //lol i currently have nothing in case it fails
     )
   }
-  */
+  
 
   onChangePrompt(e){
     this.setState({prompt:e.target.value});
@@ -101,6 +102,7 @@ export class App extends React.Component{
     //this is the images above the text box. This could be empty, if there are no images at all
     //TODO - Figure out how to use react col, so i cant set the sm = {6} to work
     //in other words, make it responsive to the size of the webpage
+    //also fix the width to be 100%. for some reason the container does not take up all the space i want it to
     let Content = (<div className = "contentBox">
       <Container style = {{padding: 0, margin:0}}>
         <Row style = {{width : "101.3%", height : "100%", margin: 0}}>
@@ -183,11 +185,10 @@ export class App extends React.Component{
         <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
         <div className = "chatHistory">
           {HistoryComponents}
-
         </div>
-
+        <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
         <div className = "profileInfo">
-
+          Profiles currently dont work
         </div>
       </div>
     )

@@ -43,6 +43,8 @@ const openAIConfig = new fakeOpenai.Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+
+
 app.use((req, res, next) => {
   //how safe is this i dont actually know
   //this used to be a proxy server so i can get around cors but i dont know shit
@@ -55,13 +57,12 @@ app.use((req, res, next) => {
 //this is the one that has actual access to the open ai api
 const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 
+let root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images';
 app.use("/power", express.static(root));
-
 
 //this is the post request that handles logging in. Checks username exists and password is right
 app.post("/verifyUser", async (req, res) => {
   const {password, email} = req.body;
-
 
   try{
     //change the database name to whatever tha name of the database is
