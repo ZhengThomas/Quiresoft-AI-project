@@ -14,6 +14,7 @@ const fs = require('fs');
 
 const dalleCalls = require("./dalleCalls");
 const GPTCalls = require("./GPTCalls");
+const cleaner = require("./cleanGPTText")
 
 
 //dont use the fake openai, it jsut set up configuraation for the openai api
@@ -33,7 +34,6 @@ database.once('connected', () => {
   console.log('Database Connected');
 })
 
-
 //Using the MongoDB Connection
 const routes = require('./routes/routes');
 app.use('/api', routes)
@@ -52,19 +52,34 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 //this is the one that has actual access to the open ai api
 const openai = new fakeOpenai.OpenAIApi(openAIConfig);
-
-//change this later, currently meant for testing
-root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images'
-//TODO - Add a .env file to hide the test key, currently its meant for testing
 
 app.use("/power", express.static(root));
 
 
+//this is the post request that handles logging in. Checks username exists and password is right
+app.post("/verifyUser", async (req, res) => {
+  const {password, email} = req.body;
 
+
+  try{
+    //change the database name to whatever tha name of the database is
+    let userDb = database.db("CHANGE THIS");
+    //find user
+    const user = await db.collection(collectionName).findOne({ username });
+    //if we found a user, and their password is they are passing in
+    if(user && user.password === password){
+      res.status(200).json({status: "success", "token" : "asdasdasdasdasd"});
+    }
+    else{
+      res.status(401).json({ status:"invalid" });
+    }
+  } catch{
+    res.status(500).json({status:"couldnt connect to database"});
+  }
+
+});
 
 app.get("/power/power", (req, res) => {
 
@@ -85,31 +100,43 @@ app.get("/power/power", (req, res) => {
       res.json({ images });
 });
 
-app.post("/gptCall", async (req, res) => {
-  const answer = await GPTCalls.GPTCall(openai, req.body.prompt);
-  res.json(answer);
-  return
-});
-
-app.post("/gptIntoDalleCall", async (req, res) => {
+//short is for short prompts. Things like "A white siamese cat" or "a chess tournament" or something
+//this is when they do not give a news article and have alreaddy read it or something
+app.post("/gptIntoDalleCallShort", async (req, res) => {
   //TODO - here we should add whatever we need to this prompt to make the prompt better
   const realPrompt = `I am going to give a sequence of orders. Give me only your response for item 2.
   1. Come up with an idea for the background image that is about ` + req.body.prompt + ` 
-  2.Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. Start the prompt with the words "Dalle Prompt"
+  2.Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible.  If the background image has nothing to do with drawing, make it realistic rather than a drawing. Start the prompt with the words "Dalle Prompt"
   `
   const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
-  //TODO - here we should filter the gpt answer to get the part thats actually useful
-  //with the current model being used, chat gpt will almost always say "dalle prompt:" before the actual prompt
-  const dalleAnswer = await dalleCalls.dalleCall(openai, gptAnswer[0].text);
+
+  //cleans up the text, removing unneccessary words and stuff
+  cleaner.cleanText(gptAnswer);
+
+  const dalleAnswer = await dalleCalls.dalleCall(openai, realAnswer);
   res.json(dalleAnswer);
   return;
 });
 
-app.get("/test", async (req, res) => {
-  const answer =await openai.listModels();
-  console.log(answer.data);
-  res.json(answer.data);
+//long is for long prompts. it is meant for whena news article or something is passed in.
+app.post("/gptIntoDalleCallLong", async (req, res) => {
+  //TODO - here we should add whatever we need to this prompt to make the prompt better
+  //This prompt is different from the short version prompt, designed for chatgpt to read the article better
+  const realPrompt = `read the following article - "` + req.body.prompt + `"
+  I am now going to give a sequence of orders. Give me only your response for item 2
+  1. Construct an idea of a background image of a social media post, based on the article that you read above.
+  2. Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. If the background image has nothing to do with drawing, make it realistic rather than a drawing. Try to avoid prompting dalle to generate words. Start the prompt with the words "Dalle Prompt"
+  `
+  const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
+
+  //cleans up the text, removing unneccessary words and stuff
+  let realAnswer = cleaner.cleanText(gptAnswer);
+
+  const dalleAnswer = await dalleCalls.dalleCall(openai, realAnswer);
+  res.json(dalleAnswer);
+  return;
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));

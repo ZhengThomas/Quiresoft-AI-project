@@ -6,7 +6,9 @@ import Form from 'react-bootstrap/Form';
 
 import axios from "axios";
 
-export class LoginPage extends React.Component{
+//Because of how similar the register page looks like to the login page, they will share the same css
+
+export class RegisterPage extends React.Component{
   constructor(props){
     super(props);
 
@@ -34,24 +36,28 @@ export class LoginPage extends React.Component{
     console.log(this.state);
     this.setState({failed:true});
     
+    
     //TODO - when the backend actually has functionality with logging in, fix this current axios call
     axios.post("http://localhost:5000/api/post", {"password": this.state.password, "email":this.state.email})
     .then((res) => {
         console.log(res)
-        this.setState({failed:true})
-        /*
+        
         if(res.data.success == true){
             //store access token
-            //gaming
+            //do basically what you do when you login
+            //unless we want to confirm the existence of an email???
         }
         else{
             this.setState({failed:true});
         }
-        */
+        
     })
     .catch((res) =>{
+        //TODO - add a failstate where it tells you it couldnt contact server.
+        //This fail is different than if the username/password already exists
         console.log("asd")
     })
+    
   }
 
   render(){
@@ -70,14 +76,14 @@ export class LoginPage extends React.Component{
         Email or password incorrect
     </div>)
     //this is the centered box for the actual login page, as well as the logo
-    //TODO - add a logo or something, and also add a forgot password section
+    //TODO - add a logo or something
     let actualLogin = (<div className = "actualLogin">
         <div className = "logo"></div>
         
         <div className= "loginBox">
             
             <div className = "titleSection">
-                <h1>Sign In</h1>
+                <h1>Register</h1>
             </div>
             <div className = "inputSection">
                 
@@ -94,10 +100,10 @@ export class LoginPage extends React.Component{
                     </Form.Group>
 
                     <Button id = "button" className = "preventColorChange" onClick = {this.submit}>
-                        Submit
+                        Create Account
                     </Button>
                     <div className = "signUp" onClick={() => {window.location = "http://google.com"}}>
-                        Sign Up
+                        Sign In
                     </div>
 
                 </Form>

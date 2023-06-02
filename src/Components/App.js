@@ -132,6 +132,7 @@ export class App extends React.Component{
 
     //this is the textBox on the bottom, along with the button
     //TODO - change the fucking button. How do I put it into the textbox???? and make it a triangle?????
+    //this ^ is honestly a fair bit low priority it looks ok
     let BottomTextBox = (
     <div className = "inputBox">
     <Form className = "inner">
