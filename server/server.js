@@ -105,14 +105,21 @@ app.get("/power/power", (req, res) => {
 //this is when they do not give a news article and have alreaddy read it or something
 app.post("/gptIntoDalleCallShort", async (req, res) => {
   //TODO - here we should add whatever we need to this prompt to make the prompt better
-  const realPrompt = `I am going to give a sequence of orders. Give me only your response for item 2.
-  1. Come up with an idea for the background image that is about ` + req.body.prompt + ` 
-  2.Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible.  If the background image has nothing to do with drawing, make it realistic rather than a drawing. Start the prompt with the words "Dalle Prompt"
+  const realPrompt = `
+  Here are some tips for generating prompts with dalle. Use this along with any existing knowledge you have for the future orders.
+  "a.Describe the Subject in Detail
+  b.Don’t Forget About the Background
+  c.Set the Mood of the Scene
+  d.try to avoid prompting dalle to generate words"
+  
+  I am going to give a sequence of orders. Give me only your response for item 2.
+  1. Come up with an idea for the background image of a social media post that is about` + req.body.prompt + `
+  2.Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. If the background image has nothing to do with drawing, make it realistic rather than a drawing. Start the prompt with the words "Dalle Prompt"
   `
   const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
 
   //cleans up the text, removing unneccessary words and stuff
-  cleaner.cleanText(gptAnswer);
+  let realAnswer = cleaner.cleanText(gptAnswer);
 
   const dalleAnswer = await dalleCalls.dalleCall(openai, realAnswer);
   res.json(dalleAnswer);

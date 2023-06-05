@@ -104,8 +104,8 @@ export class App extends React.Component{
     //in other words, make it responsive to the size of the webpage
     //also fix the width to be 100%. for some reason the container does not take up all the space i want it to
     let Content = (<div className = "contentBox">
-      <Container style = {{padding: 0, margin:0}}>
-        <Row style = {{width : "101.3%", height : "100%", margin: 0}}>
+      <Container className = "contentContainer">
+        <Row style = {{width : "100", height : "100%", margin: 0}}>
           <Col className = "contentCol" >
             {firstCol}
           </Col>
@@ -137,7 +137,7 @@ export class App extends React.Component{
     //this ^ is honestly a fair bit low priority it looks ok
     let BottomTextBox = (
     <div className = "inputBox">
-    <Form className = "inner">
+    <Form className = "inner" onSubmit={this.generateData}>
       <Form.Group className = "textBox">
         <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange" onSubmit={this.generateData}/>
       </Form.Group>
@@ -160,11 +160,14 @@ export class App extends React.Component{
     //each little piece of history displayed on the left side
     //will be put into below LeftSide
     //currently in a testing phase, later will need to do an api call for the history components
-    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing"]
+    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test"]
     let HistoryComponents = []
     //this is the white line that borders between each component
     let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
-    for(let i= 0; i < 3; i++){
+    for(let i= 0; i < testingHistoryComponents.length; i++){
+      if(i == testingHistoryComponents.length - 1){
+        whiteLine = <div></div>;
+      }
       
       HistoryComponents.push(<div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
           <div className = "verticalAlign">
@@ -179,17 +182,35 @@ export class App extends React.Component{
     //the leftside holds the past chats as well as the profile information on the bottom left
     let LeftSide = (
       <div className = "leftSideBox">
-        <div className = "topLeftHistoryBox">
+        <div className = "topLeftHistoryBox" style = {{height:"9%"}}>
           <h1>History</h1>
         </div>
+
         <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
-        <div className = "chatHistory">
-          {HistoryComponents}
+
+        <div style = {{"width":"100%", "height":"81%", "padding-right":"2px"}}>
+          <div className = "chatHistory">
+            {HistoryComponents}
+          </div>
         </div>
+
         <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
-        <div className = "profileInfo">
-          Profiles currently dont work
+
+        <div className = "profileInfo" style = {{height:"9.4%"}}>
+          <Container className = "profileContainer" style = {{padding:"0.5vh"}}>
+            <Row style = {{margin: 0}} className = "profileSection">
+              <Col md = {3} className = "profileImageHolder">
+                <img src = {this.state.images[1]} className = "contentImage"></img>
+              </Col>
+              <Col md = {9} className = "profileTextHolder">
+                <div className = "text">
+                  profileNameasdasdasd
+                </div>
+              </Col>
+            </Row>
+          </Container>
         </div>
+
       </div>
     )
     
