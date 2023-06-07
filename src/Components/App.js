@@ -42,7 +42,7 @@ export class App extends React.Component{
     //this is the main generation of the images
     //makes a request to the back end, which actually hanldes everything
     //after, the backend sends here the images that were generted based on the prompt.
-    await axios.post(secrets["dalle-gpt-call-link"], {"prompt": this.state.prompt})
+    await axios.post(secrets["dalle-gpt-call-link-long"], {"prompt": this.state.prompt})
     .then(res => {
       console.log(res.data);
 
@@ -160,7 +160,7 @@ export class App extends React.Component{
     //each little piece of history displayed on the left side
     //will be put into below LeftSide
     //currently in a testing phase, later will need to do an api call for the history components
-    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test", "scroll test"]
+    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing"];
     let HistoryComponents = []
     //this is the white line that borders between each component
     let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
@@ -200,11 +200,11 @@ export class App extends React.Component{
           <Container className = "profileContainer" style = {{padding:"0.5vh"}}>
             <Row style = {{margin: 0}} className = "profileSection">
               <Col md = {3} className = "profileImageHolder">
-                <img src = {this.state.images[1]} className = "contentImage"></img>
+                <img src = {`/images/test1.png`} className = "contentImage"></img>
               </Col>
               <Col md = {9} className = "profileTextHolder">
                 <div className = "text">
-                  profileNameasdasdasd
+                  profileNamebutverylong
                 </div>
               </Col>
             </Row>
