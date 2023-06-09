@@ -43,10 +43,12 @@ export class RegisterPage extends React.Component{
         console.log(res)
         
         if(res.data.success == true){
-            //store access token
-            //do basically what you do when you login
-            //unless we want to confirm the existence of an email???
-            console.log( "Success")
+          //TODO - store access token
+          console.log("Success");
+          
+          //set page to be the actual app
+          window.location.href = "/";
+
         }
         else{
             this.setState({failed:true});
@@ -103,7 +105,7 @@ export class RegisterPage extends React.Component{
                     <Button id = "button" className = "preventColorChange" onClick = {this.submit}>
                         Create Account
                     </Button>
-                    <div className = "signUp" onClick={() => {window.location = "http://google.com"}}>
+                    <div className = "signUp" onClick={() => {window.location = "/login"}}>
                         Sign In
                     </div>
 

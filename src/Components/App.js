@@ -57,7 +57,6 @@ export class App extends React.Component{
 
   
   async generatePostData(event){
-   
 
     if(this.state.prompt == "" || this.state.currentState == "loading"){
       return;
@@ -77,7 +76,13 @@ export class App extends React.Component{
       if (currTime > decodedToken.exp){
         isExpired = true;
         console.log("User Expired, Please Log In")
+        
         //Prompt the user to log in or sign up
+        //currenlty this is a stogap measure
+        //TODO - add a popup for a login
+        window.location.href = "/login";
+        return;
+
       } else {
         console.log("User Token is still valid")
       }

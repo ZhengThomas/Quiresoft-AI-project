@@ -96,7 +96,7 @@ export class LoginPage extends React.Component{
                     <Button id = "button" className = "preventColorChange" onClick = {this.submit}>
                         Submit
                     </Button>
-                    <div className = "signUp" onClick={() => {window.location = "http://google.com"}}>
+                    <div className = "signUp" onClick={() => {window.location = "/register"}}>
                         Sign Up
                     </div>
 
