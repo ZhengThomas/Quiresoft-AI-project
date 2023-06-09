@@ -85,6 +85,7 @@ app.get("/power/power", (req, res) => {
 //short is for short prompts. Things like "A white siamese cat" or "a chess tournament" or something
 //this is when they do not give a news article and have alreaddy read it or something
 app.post("/gptIntoDalleCallShort", async (req, res) => {
+  //here we should test if the security token that is passed in (req.body.token) is valid
   //TODO - here we should add whatever we need to this prompt to make the prompt better
   const realPrompt = `
   Here are some tips for generating prompts with dalle. Use this along with any existing knowledge you have for the future orders.
@@ -114,7 +115,7 @@ app.post("/gptIntoDalleCallLong", async (req, res) => {
   const realPrompt = `read the following article - "` + req.body.prompt + `"
   I am now going to give a sequence of orders. Give me only your response for item 2
   1. Construct an idea of a background image of a social media post, based on the article that you read above.
-  2. Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. If the background image has nothing to do with drawing, make it realistic rather than a drawing. Try to avoid prompting dalle to generate words. Start the prompt with the words "Dalle Prompt"
+  2. Think of a short prompt that can be given to dalle for that specific idea you came up with in order 1.  The prompt should depict something that physically exists, rather than something intangible. If the background image has nothing to do with drawing, make it realistic rather than a drawing. Try to avoid prompting dalle to generate words, such as news articles or news headlines. Start the prompt with the words "Dalle Prompt"
   `
   const gptAnswer = await GPTCalls.GPTCall(openai, realPrompt);
 
@@ -130,6 +131,14 @@ app.post("/api/registers", async (req, res) => {
 console.log("asdasdasd")
 })
 
+
+
+app.post("/gptCallThatsIt", async (req, res) => {
+  //check for token validity here
+  const gptAnswer = await GPTCalls.GPTCall(openai, req.body.prompt);
+  res.json(gptAnswer);
+  return;
+});
 
 
 const PORT = process.env.PORT || 5000;

@@ -17,7 +17,7 @@ const GPTCall = async function(openai, prompt){
     messages: [{role: "user", content: prompt}],
   });
   */
-
+  console.log(response.data.choices[0])
   return response.data.choices;
 }
 
