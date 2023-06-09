@@ -40,7 +40,9 @@ export class LoginPage extends React.Component{
         console.log(res)
         
         if(res.data != false){
-            window.sessionStorage.token = res.data;
+          window.sessionStorage.token = res.data;
+          window.location.href = "/";
+          
         }
         else{
             this.setState({failed:true});
