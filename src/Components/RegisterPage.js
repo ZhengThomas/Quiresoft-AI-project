@@ -33,6 +33,7 @@ export class RegisterPage extends React.Component{
   }
 
   submit(e){
+    e.preventDefault();
     console.log(this.state);
     this.setState({failed:true});
     
@@ -48,10 +49,10 @@ export class RegisterPage extends React.Component{
           
           //set page to be the actual app
           window.location.href = "/";
-
         }
         else{
-            this.setState({failed:true});
+          this.setState({failed:true});
+          console.log("failed lol")
         }
         
     })

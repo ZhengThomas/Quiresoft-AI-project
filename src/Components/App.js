@@ -55,8 +55,10 @@ export class App extends React.Component{
 
 
   testToken(){
+    return "valid token"
     const token = sessionStorage.getItem('token');
-    if (token != null || token != ""){
+    console.log("got here")
+    if (token !== null && token !== ""){
       var decodedToken = jwt_decode(token);
       console.log(decodedToken)
       console.log("DECODED TOKEN ^")
@@ -137,12 +139,13 @@ export class App extends React.Component{
     let toAdd = this.state.pastChats;
     //TODO - change the username to the actual username
     toAdd.push({"speaker":"username", "text":this.state.prompt});
-    this.setState({pastChats:toAdd, prompt:""});
+    this.setState({pastChats:toAdd, prompt:"", currentState:"waiting"});
 
     axios.post(secrets["straight-gpt-call"], {"prompt": this.state.prompt, "token":this.state.securityToken})
     .then((res) => {
       let toAdd = this.state.pastChats;
       toAdd.push({"speaker": "chatGPT", "text":res.data[0].text});
+      this.setState({pastChats:toAdd, currentState:"new"});
       return;
     })
     .catch((err) => {
@@ -229,7 +232,7 @@ export class App extends React.Component{
           <div className = "textArea">
             <div className = "titleText"><p>{this.state.pastChats[i].speaker}</p></div>
             <div className = "contentText">
-              {this.state.pastChats[i].text}
+              {"pussy\npussy"}
             </div>
           </div>
         </div>)
@@ -264,7 +267,7 @@ export class App extends React.Component{
     <div className = "inputBox">
     <Form className = "inner" onSubmit={this.generateData}>
       <Form.Group className = "textBox">
-        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange" onSubmit={this.generateData}/>
+        <Form.Control placeholder="Enter Prompt" onChange = {this.onChangePrompt} className = "preventColorChange" onSubmit={this.generateData} value = {this.state.prompt}/>
       </Form.Group>
       <Button id = "button" onClick = {this.generateData} className = "preventColorChange">
         Submit
