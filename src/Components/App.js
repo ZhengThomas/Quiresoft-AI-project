@@ -170,22 +170,23 @@ export class App extends React.Component{
       //this content holds all the past texts
       //the way i styled it is heavilty inspired by discord
       let allTexts = [];
-      for(let i = 0; i < 1; i++){
+      for(let i = this.state.pastChats.length - 1; i >= 0; i--){
         allTexts.push(<div className = "textContainer">
           <div className = "profilePicContainer" >
             <img src = {`/images/test1.png`} className = "profilePicImage"></img>
           </div>
           <div className = "textArea">
-            <div className = "titleText">name</div>
+            <div className = "titleText"><p>{this.state.pastChats[i].speaker}</p></div>
             <div className = "contentText">
-              pussyasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+              {this.state.pastChats[i].text}
             </div>
           </div>
         </div>)
       }
-      Content = (<div className = "">
-
-        {allTexts}
+      Content = (<div className = "chatGptText">
+        <div className = "realGptText">
+          {allTexts}
+        </div>
       </div>)
     }
 
