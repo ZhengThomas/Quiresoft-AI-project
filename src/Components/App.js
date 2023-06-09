@@ -7,6 +7,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Buffer} from 'buffer';
 import { Container, Row, Col } from 'react-bootstrap';
+import jwt_decode from "jwt-decode";
+
+
+
 
 //im fairly certain that I'm supposed to do this to be safe, but im unsure why
 //if you are someone from the future please help
@@ -37,6 +41,7 @@ export class App extends React.Component{
     this.generateChatData = this.generateChatData.bind(this);
   }
 
+  
   async generateData(e){
     e.preventDefault();
     if(this.state.type == "post"){
@@ -47,10 +52,42 @@ export class App extends React.Component{
     }
   }
 
+
+
+
+  
   async generatePostData(event){
+   
+
     if(this.state.prompt == "" || this.state.currentState == "loading"){
       return;
     }
+
+    var isExpired = false;
+    const token = sessionStorage.getItem('token');
+
+    if (token != null){
+      var decodedToken = jwt_decode(token);
+      console.log(decodedToken)
+      console.log("DECODED TOKEN ^")
+      var currTime =  Date.now() / 1000
+      console.log(currTime)
+
+      console.log(decodedToken.exp)
+      if (currTime > decodedToken.exp){
+        isExpired = true;
+        console.log("User Expired, Please Log In")
+        //Prompt the user to log in or sign up
+      } else {
+        console.log("User Token is still valid")
+      }
+      //Add else statement sayiing what to do if verified correctly.
+
+    } 
+    else {
+      console.log("No Token Present")
+    }
+
 
     if(this.state.securityToken == "" || !this.state.loggedIn){
       this.setState({currentState:"login"});

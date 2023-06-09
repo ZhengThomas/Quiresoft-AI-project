@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
             return res.status(409).send("User Already Exist. Please Login");
         }
         console.log("Data Saved")
-  
+
         const user = await Model.create({
             email: email.toLowerCase(),
             pass: pass,
@@ -56,17 +56,26 @@ router.post("/verifyUser", async (req, res) => {
     console.log("HERE")
     try{
         console.log("F")
-        const verifyData = await Model.find({pass: req.body.pass, email: req.body.email})
+
+        const {pass, email} = req.body;
+        const verifyData = await Model.find({pass: pass, email: email})
         console.log(verifyData.length)
         if (verifyData.length == 1){
-            res.status(200).json('True')
+            const token = jwt.sign(
+                { user_id: verifyData._id, email},
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "2h",
+                }
+            );
+            console.log(token)       
+            res.status(201).json(token)
         } else {
-            res.status(200).json('False')
+            res.status(200).json(false)
         }
 
     } catch(error){
         res.status(400).json({message: error.message})
-
     }
   
   });
