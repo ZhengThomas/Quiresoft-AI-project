@@ -13,6 +13,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import secrets from "../secrets.json";
 
 
+//So app covers post the post generator and the chatbot
+//im fairly certain this is a stupid way of doing things but im not very smart
 export class App extends React.Component{
   constructor(props){
     super(props);
@@ -23,26 +25,44 @@ export class App extends React.Component{
       img : null,
       images: [],
       currentState: "new",
-      prompt:""
+      prompt:"",
+      loggedIn:false,
+      type :"post",
+      pastChats : []
     };
 
-    this.generateData = this.generateData.bind(this);
+    this.generatePostData = this.generatePostData.bind(this);
     this.onChangePrompt = this.onChangePrompt.bind(this);
+    this.generateData = this.generateData.bind(this);
+    this.generateChatData = this.generateChatData.bind(this);
   }
 
-  async generateData(event){
-    event.preventDefault();
+  async generateData(e){
+    e.preventDefault();
+    if(this.state.type == "post"){
+      this.generatePostData(e);
+    }
+    else if (this.state.type == "chat"){
+      this.generateChatData(e);
+    }
+  }
+
+  async generatePostData(event){
     if(this.state.prompt == "" || this.state.currentState == "loading"){
       return;
     }
 
+    if(this.state.securityToken == "" || !this.state.loggedIn){
+      this.setState({currentState:"login"});
+    }
+
     //since calling for data takes a while, the state is set to be loading the images
-    this.setState({currentState: "loading"})
+    this.setState({currentState: "loading"});
 
     //this is the main generation of the images
     //makes a request to the back end, which actually hanldes everything
     //after, the backend sends here the images that were generted based on the prompt.
-    await axios.post(secrets["dalle-gpt-call-link-long"], {"prompt": this.state.prompt})
+    await axios.post(secrets["dalle-gpt-call-link-long"], {"prompt": this.state.prompt, "token":this.state.securityToken})
     .then(res => {
       console.log(res.data);
 
@@ -59,22 +79,53 @@ export class App extends React.Component{
 
   }
 
+  async generateChatData(e){
+    console.log("chat")
+    
+    if(this.state.prompt == "" || this.state.currentState == "loading"){
+      return;
+    }
+
+    if(this.state.securityToken == "" || !this.state.loggedIn){
+      this.setState({currentState:"login"});
+    }
+
+    //since calling for data takes a while, the state is set to be loading the images
+    this.setState({currentState: "loading"});
+
+    axios.post(secrets["straight-gpt-call"], {"prompt": this.state.prompt, "token":this.state.securityToken})
+    .then((res) => {
+      return;
+    })
+  }
+
   
   componentDidMount(){
-    //this is msotly for testing purposes to see if the front end can communicate with the backend
-    //unsure if backend even has this endpoint currently
-    axios.get("http://localhost:5000/power/power")
-    .then(res => {
-      this.setState({images:res.data.images});
-    })
-    .catch(
-      //lol i currently have nothing in case it fails
-    )
+
+    let secToken = window.sessionStorage.securityToken;
+    let secTokenExpiry = window.sessionStorage.securityTokenTime;
+    if(secToken == null){
+      secToken = "";
+    }
+    //sec token hasnt expired (unreliable, as if time on computer is changed then it might give bad time)
+    //logggedIn defaults to false
+    if(secTokenExpiry < Date.now()){
+      this.setState({"loggedIn":true});
+    }
+
+    //yeah i know, i wrote the code assuming id get a token inside the state
+    //since at the time i didnt fully understand where id be storing them
+    this.setState({securityToken:secToken, securityTime:secTokenExpiry});
   }
   
 
   onChangePrompt(e){
     this.setState({prompt:e.target.value});
+  }
+
+  changeTo(e, which){
+    e.preventDefault();
+    this.setState({"type":which});
   }
 
   //TODO - everything looks like shit
@@ -102,7 +153,6 @@ export class App extends React.Component{
     //this is the images above the text box. This could be empty, if there are no images at all
     //TODO - Figure out how to use react col, so i cant set the sm = {6} to work
     //in other words, make it responsive to the size of the webpage
-    //also fix the width to be 100%. for some reason the container does not take up all the space i want it to
     let Content = (<div className = "contentBox">
       <Container className = "contentContainer">
         <Row style = {{width : "100", height : "100%", margin: 0}}>
@@ -115,6 +165,29 @@ export class App extends React.Component{
         </Row>
       </Container>
     </div>);
+
+    if(this.state.type == "chat"){
+      //this content holds all the past texts
+      //the way i styled it is heavilty inspired by discord
+      let allTexts = [];
+      for(let i = 0; i < 1; i++){
+        allTexts.push(<div className = "textContainer">
+          <div className = "profilePicContainer" >
+            <img src = {`/images/test1.png`} className = "profilePicImage"></img>
+          </div>
+          <div className = "textArea">
+            <div className = "titleText">name</div>
+            <div className = "contentText">
+              pussyasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+            </div>
+          </div>
+        </div>)
+      }
+      Content = (<div className = "">
+
+        {allTexts}
+      </div>)
+    }
 
     if(this.state.currentState == "loading"){
       Content = 
@@ -159,38 +232,40 @@ export class App extends React.Component{
     
     //each little piece of history displayed on the left side
     //will be put into below LeftSide
-    //currently in a testing phase, later will need to do an api call for the history components
-    let testingHistoryComponents = ["Gaming Images", "powerful images", "testing testing testing"];
-    let HistoryComponents = []
-    //this is the white line that borders between each component
+    //This area used to be a hisotry bar, but it was changed, so there may be some things that are named weirdly
+
+    //this is the white line that borders between each button component
     let whiteLine = (<div style = {{"width":"40%", "height": "1px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />)
-    for(let i= 0; i < testingHistoryComponents.length; i++){
-      if(i == testingHistoryComponents.length - 1){
-        whiteLine = <div></div>;
-      }
-      
-      HistoryComponents.push(<div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
-          <div className = "verticalAlign">
-            <div className = "historyComponent">
-              <h3>{testingHistoryComponents[i]}</h3>
-            </div>
-          </div>
-          {whiteLine}
-        </div>
-      );
-    }
+    let chatbotButton = (
+    <div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
+    <div className = "verticalAlign" onClick = {(e) => {this.changeTo(e, "chat")}}>
+      <div className = "navigationComponent">
+        <h3>Chat Bot</h3>
+      </div>
+    </div>
+    {whiteLine}
+    </div>);
+
+    let imageGenButton = (
+    <div style = {{"display":"flex", "align-items": "center", "flex-direction":"column", "width":"100%"}}>
+    <div className = "verticalAlign" onClick = {(e) => {this.changeTo(e, "posts")}}>
+      <div className = "navigationComponent">
+        <h3>Post Generator</h3>
+      </div>
+    </div>
+    </div>);
     //the leftside holds the past chats as well as the profile information on the bottom left
     let LeftSide = (
       <div className = "leftSideBox">
-        <div className = "topLeftHistoryBox" style = {{height:"9%"}}>
-          <h1>History</h1>
+        <div className = "topLeftInfoBox" style = {{height:"9%"}}>
+          <h1>Post Generator</h1>
         </div>
 
-        <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
-
-        <div style = {{"width":"100%", "height":"81%", "padding-right":"2px"}}>
-          <div className = "chatHistory">
-            {HistoryComponents}
+        <div style = {{"width":"100%", "height":"81%"}}>
+          <div style = {{"width":"100%", "height": "2px", "backgroundColor":"#FFFFFF", "margin": "none", "padding": "none"}} />
+          <div className = "navbarArea">
+            {chatbotButton}
+            {imageGenButton}
           </div>
         </div>
 

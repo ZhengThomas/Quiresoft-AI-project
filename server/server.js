@@ -104,6 +104,7 @@ app.get("/power/power", (req, res) => {
 //short is for short prompts. Things like "A white siamese cat" or "a chess tournament" or something
 //this is when they do not give a news article and have alreaddy read it or something
 app.post("/gptIntoDalleCallShort", async (req, res) => {
+  //here we should test if the security token that is passed in (req.body.token) is valid
   //TODO - here we should add whatever we need to this prompt to make the prompt better
   const realPrompt = `
   Here are some tips for generating prompts with dalle. Use this along with any existing knowledge you have for the future orders.
@@ -142,6 +143,14 @@ app.post("/gptIntoDalleCallLong", async (req, res) => {
 
   const dalleAnswer = await dalleCalls.dalleCall(openai, realAnswer);
   res.json(dalleAnswer);
+  return;
+});
+
+
+app.post("/gptCallThatsIt", async (req, res) => {
+  //check for token validity here
+  const gptAnswer = await GPTCalls.GPTCall(openai, req.body.prompt);
+  res.json(gptAnswer);
   return;
 });
 
