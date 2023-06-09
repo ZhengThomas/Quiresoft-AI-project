@@ -36,7 +36,7 @@ database.once('connected', () => {
 
 //Using the MongoDB Connection
 const routes = require('./routes/routes');
-app.use('/api', routes)
+
 
 const openAIConfig = new fakeOpenai.Configuration({
     organization: "org-EOQWL5JneFqSFELhPmlVTlow",
@@ -54,33 +54,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api', routes)
 //this is the one that has actual access to the open ai api
 const openai = new fakeOpenai.OpenAIApi(openAIConfig);
 
 let root = 'C:/Users/mralb/Documents/quiresoft/quiresoft/server/images';
 app.use("/power", express.static(root));
 
-//this is the post request that handles logging in. Checks username exists and password is right
-app.post("/verifyUser", async (req, res) => {
-  const {password, email} = req.body;
 
-  try{
-    //change the database name to whatever tha name of the database is
-    let userDb = database.db("CHANGE THIS");
-    //find user
-    const user = await db.collection(collectionName).findOne({ username });
-    //if we found a user, and their password is they are passing in
-    if(user && user.password === password){
-      res.status(200).json({status: "success", "token" : "asdasdasdasdasd"});
-    }
-    else{
-      res.status(401).json({ status:"invalid" });
-    }
-  } catch{
-    res.status(500).json({status:"couldnt connect to database"});
-  }
-
-});
 
 app.get("/power/power", (req, res) => {
 
@@ -143,7 +124,12 @@ app.post("/gptIntoDalleCallLong", async (req, res) => {
   const dalleAnswer = await dalleCalls.dalleCall(openai, realAnswer);
   res.json(dalleAnswer);
   return;
-});
+})
+
+app.post("/api/registers", async (req, res) => {
+console.log("asdasdasd")
+})
+
 
 
 const PORT = process.env.PORT || 5000;

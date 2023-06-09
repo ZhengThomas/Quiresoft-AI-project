@@ -35,7 +35,7 @@ export class LoginPage extends React.Component{
     this.setState({failed:true});
     
     //TODO - when the backend actually has functionality with logging in, fix this current axios call
-    axios.post("http://localhost:5000/api/post", {"password": this.state.password, "email":this.state.email})
+    axios.post("http://localhost:5000/api/verifyUser", {"pass": this.state.password, "email":this.state.email})
     .then((res) => {
         console.log(res)
         this.setState({failed:true})

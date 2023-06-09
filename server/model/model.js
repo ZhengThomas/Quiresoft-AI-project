@@ -8,6 +8,9 @@ const dataSchema = new mongoose.Schema({
     pass: {
         required: true, 
         type: String
+    },
+    token: {
+        type: String
     }
 })
 

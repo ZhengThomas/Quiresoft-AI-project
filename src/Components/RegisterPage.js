@@ -36,9 +36,9 @@ export class RegisterPage extends React.Component{
     console.log(this.state);
     this.setState({failed:true});
     
-    
+
     //TODO - when the backend actually has functionality with logging in, fix this current axios call
-    axios.post("http://localhost:5000/api/post", {"password": this.state.password, "email":this.state.email})
+    axios.post("http://localhost:5000/api/register", {"pass": this.state.password, "email":this.state.email})
     .then((res) => {
         console.log(res)
         
@@ -46,6 +46,7 @@ export class RegisterPage extends React.Component{
             //store access token
             //do basically what you do when you login
             //unless we want to confirm the existence of an email???
+            console.log( "Success")
         }
         else{
             this.setState({failed:true});
