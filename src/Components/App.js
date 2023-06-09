@@ -54,18 +54,9 @@ export class App extends React.Component{
 
 
 
-
-  
-  async generatePostData(event){
-
-    if(this.state.prompt == "" || this.state.currentState == "loading"){
-      return;
-    }
-
-    var isExpired = false;
+  testToken(){
     const token = sessionStorage.getItem('token');
-
-    if (token != null){
+    if (token != null || token != ""){
       var decodedToken = jwt_decode(token);
       console.log(decodedToken)
       console.log("DECODED TOKEN ^")
@@ -74,23 +65,30 @@ export class App extends React.Component{
 
       console.log(decodedToken.exp)
       if (currTime > decodedToken.exp){
-        isExpired = true;
-        console.log("User Expired, Please Log In")
-        
-        //Prompt the user to log in or sign up
-        //currenlty this is a stogap measure
-        //TODO - add a popup for a login
-        window.location.href = "/login";
-        return;
-
+        return "expired token";
       } else {
-        console.log("User Token is still valid")
+        return "valid token"
       }
       //Add else statement sayiing what to do if verified correctly.
-
     } 
     else {
-      console.log("No Token Present")
+      return "no token";
+    }
+  }
+  
+  async generatePostData(event){
+
+    if(this.state.prompt == "" || this.state.currentState == "loading"){
+      return;
+    }
+    
+    //if token is bad, then we send you to the login page
+    let tokenResult = this.testToken();
+    if(tokenResult == "expired token" || tokenResult == "no token"){
+      //TODO - create a popup for the token
+      //currently this is a stopgap measure
+      window.location.href = "/login";
+      return;
     }
 
 
@@ -128,16 +126,27 @@ export class App extends React.Component{
       return;
     }
 
-    if(this.state.securityToken == "" || !this.state.loggedIn){
-      this.setState({currentState:"login"});
+    const tokenResult = this.testToken();
+    if(tokenResult == "no token" || tokenResult == "expired token"){
+      //TODO - add a popup to make the user login
+      //stopgap blah blah blah
+      window.location.href = "/login";
+      return;
     }
 
-    //since calling for data takes a while, the state is set to be loading the images
-    this.setState({currentState: "loading"});
+    let toAdd = this.state.pastChats;
+    //TODO - change the username to the actual username
+    toAdd.push({"speaker":"username", "text":this.state.prompt});
+    this.setState({pastChats:toAdd, prompt:""});
 
     axios.post(secrets["straight-gpt-call"], {"prompt": this.state.prompt, "token":this.state.securityToken})
     .then((res) => {
+      let toAdd = this.state.pastChats;
+      toAdd.push({"speaker": "chatGPT", "text":res.data[0].text});
       return;
+    })
+    .catch((err) => {
+      console.log("error in axios call for chat");
     })
   }
 
@@ -301,7 +310,7 @@ export class App extends React.Component{
     let LeftSide = (
       <div className = "leftSideBox">
         <div className = "topLeftInfoBox" style = {{height:"9%"}}>
-          <h1>Post Generator</h1>
+          <h1>{this.state.type == "post" ? "Post Generator" : "Chat Bot"}</h1>
         </div>
 
         <div style = {{"width":"100%", "height":"81%"}}>
