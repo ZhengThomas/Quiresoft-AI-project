@@ -38,16 +38,14 @@ export class LoginPage extends React.Component{
     axios.post("http://localhost:5000/api/verifyUser", {"pass": this.state.password, "email":this.state.email})
     .then((res) => {
         console.log(res)
-        this.setState({failed:true})
-        /*
-        if(res.data.success == true){
-            //store access token
-            //gaming
+        
+        if(res.data != false){
+            window.sessionStorage.token = res.data;
         }
         else{
             this.setState({failed:true});
         }
-        */
+        
     })
     .catch((res) =>{
         console.log("asd")
