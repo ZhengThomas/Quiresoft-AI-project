@@ -54,8 +54,6 @@ export class App extends React.Component{
 
 
 
-
-  
   async generatePostData(event){
 
     if(this.state.prompt == "" || this.state.currentState == "loading"){
