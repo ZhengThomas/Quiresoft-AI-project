@@ -20,9 +20,9 @@ router.post('/register', async (req, res) => {
         const checkDupes = await Model.findOne({ email})
 
         if (checkDupes){    
-            return res.status(409).send("User Already Exist. Please Login");
+            return res.status(409).send(false);
         }
-        console.log("Data Saved")
+
 
         const user = await Model.create({
             email: email.toLowerCase(),
@@ -37,10 +37,11 @@ router.post('/register', async (req, res) => {
             expiresIn: "2h",
         }
         );
+        console.log(token)
         console.log("token saved")
-        user.token = token;
 
-        res.status(201).json(user)
+
+        res.status(201).json(token)
 
     }
     catch(error){

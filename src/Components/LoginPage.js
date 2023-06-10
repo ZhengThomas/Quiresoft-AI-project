@@ -41,6 +41,7 @@ export class LoginPage extends React.Component{
         
         if(res.data != false){
           window.sessionStorage.token = res.data;
+          console.log(window.sessionStorage.token)
           window.location.href = "/";
           
         }

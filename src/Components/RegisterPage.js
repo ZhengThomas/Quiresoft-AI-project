@@ -33,6 +33,8 @@ export class RegisterPage extends React.Component{
   }
 
   submit(e){
+    e.preventDefault();
+
     console.log(this.state);
     this.setState({failed:true});
     
@@ -42,10 +44,12 @@ export class RegisterPage extends React.Component{
     .then((res) => {
         console.log(res)
         
-        if(res.data.success == true){
-          //TODO - store access token
+        if(res.data != false){
+          console.log(res.data)
+          console.log("RES")
+          window.sessionStorage.token = res.data;
           console.log("Success");
-          
+          console.log(window.sessionStorage.token)
           //set page to be the actual app
           window.location.href = "/";
 
