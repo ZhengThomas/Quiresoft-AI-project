@@ -10,8 +10,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 import jwt_decode from "jwt-decode";
 
 
-
-
 //im fairly certain that I'm supposed to do this to be safe, but im unsure why
 //if you are someone from the future please help
 import secrets from "../secrets.json";
@@ -41,7 +39,6 @@ export class App extends React.Component{
     this.generateChatData = this.generateChatData.bind(this);
   }
 
-  
   async generateData(e){
     e.preventDefault();
     if(this.state.type == "post"){
@@ -51,8 +48,6 @@ export class App extends React.Component{
       this.generateChatData(e);
     }
   }
-
-
 
   testToken(){
     return "valid token"
@@ -171,7 +166,6 @@ export class App extends React.Component{
     //since at the time i didnt fully understand where id be storing them
     this.setState({securityToken:secToken, securityTime:secTokenExpiry});
   }
-  
 
   onChangePrompt(e){
     this.setState({prompt:e.target.value});
@@ -180,6 +174,14 @@ export class App extends React.Component{
   changeTo(e, which){
     e.preventDefault();
     this.setState({"type":which});
+  }
+
+  addBreaks(text){
+    let splitText = text.split("\n")
+    let finishedObject;
+    for(let i = 0; i < splitText.length; i++){
+      
+    }
   }
 
   //TODO - everything looks like shit
@@ -232,7 +234,7 @@ export class App extends React.Component{
           <div className = "textArea">
             <div className = "titleText"><p>{this.state.pastChats[i].speaker}</p></div>
             <div className = "contentText">
-              {"pussy\npussy"}
+              {this.state.pastChats[i].text}
             </div>
           </div>
         </div>)
