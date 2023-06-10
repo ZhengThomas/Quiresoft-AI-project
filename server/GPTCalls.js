@@ -7,7 +7,7 @@ const GPTCall = async function(openai, prompt){
   const response = await openai.createCompletion({
     "model": "text-davinci-002", 
     "prompt": prompt,
-    "max_tokens":60
+    "max_tokens":600
   });
     //console.log(response.data.choices[0])
 
